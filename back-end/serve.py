@@ -9,7 +9,6 @@ from flask_cors import CORS
 #==================================
 
 UPLOAD_FOLDER = 'uploads'
-UPLOAD_FOLDER = 'static/result'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__, static_folder='static/label',static_url_path = "/label")
 CORS(app, resources=r'/*')	# 注册CORS, "/*" 允许访问所有api
@@ -19,10 +18,17 @@ auth = HTTPBasicAuth()
 #================================================#
 #                 以下是对API的定义               #
 #================================================#
+"""
+（待改进）
+完成图像上传->预测->保存图片。
+流程：
+1. 规定api名称，前端调用后，上传图片，图片放到 ./uploads里
+2. 然后调用predict函数，从/uploads里读取图片，预测，然后把结果图片保存到./static/label
+3. 然后前端获取文件名，从label/文件名 拿图
+"""
 @app.route('/imgUpload', methods=['GET', 'POST'])
 def upload_img():
     print("image upload")
-    result = 'static/label' # 结果放到/static/result
     if request.method == 'POST' or request.method == 'GET':    
         if 'file' not in request.files:   # 如果没有检测到上传了文件
             print('No file part')

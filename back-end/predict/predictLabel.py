@@ -48,7 +48,7 @@ def predict(file_name):
             seg_img[:, :, 1] += ((pr == c)*( self.colors[c][1] )).astype('uint8')
             seg_img[:, :, 2] += ((pr == c)*( self.colors[c][2] )).astype('uint8')
         '''
-        img = 'static/result/'+file_name
+        img = 'static/uploads/'+file_name
         try:
             image = Image.open(img)
         except:

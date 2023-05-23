@@ -153,7 +153,8 @@ export default {
   name: "Content",
   data() {
     return {
-      server_url: "http://127.0.0.1:5003",
+      server_url: "http://127.0.0.1:8000",
+      label_url:"http://127.0.0.1:8000/label/", //标签网络地址
       activeName: "first",
       active: 0,
       centerDialogVisible: true,
@@ -232,13 +233,16 @@ export default {
         headers: { "Content-Type": "multipart/form-data" },
       }; //添加请求头
       axios
-        .post(this.server_url + "/upload", param, config)
+        .post(this.server_url + "/imgUpload", param, config)
         .then((response) => {
+          console.log(response)
           this.percentage = 100;
           clearInterval(timer);
-          this.url_1 = response.data.image_url;
+          //this.url_1 = this.label_url+response.data;
           this.srcList.push(this.url_1);
-          this.url_2 = response.data.draw_url;
+          this.url_2 = this.label_url+response.data;
+          console.log(this.url_1)
+          this.dialogTableVisible = false;
           this.srcList1.push(this.url_2);
           this.fullscreenLoading = false;
           this.loading = false;
@@ -252,7 +256,7 @@ export default {
 
           this.feature_list.push(response.data.image_info);
           this.feature_list_1 = this.feature_list[0];
-          this.dialogTableVisible = false;
+          //this.dialogTableVisible = false;
           this.percentage = 0;
           this.notice1();
         });

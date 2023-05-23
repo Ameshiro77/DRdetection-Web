@@ -1,16 +1,27 @@
 <template>
-  <div id="Header">
-    <div class="top-left-edition">
-      <span style="color: #21b3b9; font-weight: bold">
-        <i class="el-icon-star-off" style="font-size: 23px"></i
-        >教教前端吧
-      </span>
+  <!-- 整个header的大盒子 -->
+  <div
+    class="header"
+    style="display: flex; width: 90%; justify-content: center"
+  >
+    <!-- 标题 -->
+    <div class="title">
+      <h1
+        style="
+          color: #252ce8;
+          letter-spacing: 10px;
+          font-size: 2.3em;
+          margin-left: -2%;
+        "
+      >
+        糖尿病视网膜病变检测系统
+      </h1>
+    </div>
+    <!-- 自己加 -->
+    <div class="no!" style="margin-left: 10%">
       <span>
         <i class="el-icon-time" style="font-size: 23px"></i>进度：烂完了
       </span>
-    </div>
-    <div id="word">
-      <h1> 糖尿病视网膜病变检测 预测系统 </h1>
     </div>
   </div>
 </template>
@@ -18,43 +29,19 @@
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
 };
 </script>
 
 
 <style scoped>
-#Header {
-  padding: 30px 110px 0 150px;
-  width: 90%;
-  margin: 10px auto;
-}
-
-#word {
-  margin-left: 45%;
-  margin-top: -35px;
-  margin-bottom: 37px;
+#title {
+  margin-left: 1%;
+  margin-top: 1%;
+  margin-bottom: 1%;
   height: 60px;
   line-height: 3.2em;
   letter-spacing: 8px;
-}
-
-h1 {
-  /*text-align: center;*/
-  color: #21b3b9;
-  letter-spacing: 30px;
-  font-size: 2.3em;
-}
-
-.el-menu-demo {
-  width: 80%;
-  margin: 0px auto;
-  padding: 0px auto;
-}
-
-.top-left-edition span i {
-  float: left;
-  margin-right: 10px;
 }
 
 i,
@@ -67,14 +54,6 @@ i {
   border: 0;
   display: block;
   cursor: pointer;
-}
-
-.top-left-edition span {
-  float: left;
-  font-size: 16px;
-  color: #999999;
-  line-height: 24px;
-  margin-right: 40px;
 }
 </style>
 

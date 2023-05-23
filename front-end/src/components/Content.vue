@@ -86,11 +86,14 @@
           </div>
         </el-card>
       </div>
+
       <div id="info_patient">
         <!-- 卡片放置表格 -->
         <el-card style="border-radius: 8px">
           <div slot="header" class="clearfix">
-            <span>检测目标</span>
+            <div style="width: 750px; text-align: center">
+              <span>分类结果：</span>
+            </div>
             <el-button
               style="margin-left: 35px"
               v-show="!showbutton"
@@ -109,37 +112,6 @@
               />
             </el-button>
           </div>
-          <el-tabs v-model="activeName">
-            <el-tab-pane label="检测到的目标" name="first">
-              <!-- 表格存放特征值 -->
-              <el-table
-                :data="feature_list"
-                height="390"
-                border
-                style="width: 750px; text-align: center"
-                v-loading="loading"
-                element-loading-text="数据正在处理中，请耐心等待"
-                element-loading-spinner="el-icon-loading"
-                lazy
-              >
-                <el-table-column label="目标类别" width="250px">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row[2] }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="目标大小" width="250px">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row[0] }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="置信度" width="250px">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row[1] }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-          </el-tabs>
         </el-card>
       </div>
     </div>
@@ -154,7 +126,7 @@ export default {
   data() {
     return {
       server_url: "http://127.0.0.1:8000",
-      label_url:"http://127.0.0.1:8000/label/", //标签网络地址
+      label_url: "http://127.0.0.1:8000/label/", //标签网络地址
       activeName: "first",
       active: 0,
       centerDialogVisible: true,
@@ -183,7 +155,7 @@ export default {
     };
   },
   created: function () {
-    document.title = "YOLOv5目标检测WEB端";
+    document.title = "DR检测demo";
   },
   methods: {
     true_upload() {
@@ -235,13 +207,13 @@ export default {
       axios
         .post(this.server_url + "/imgUpload", param, config)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           this.percentage = 100;
           clearInterval(timer);
           //this.url_1 = this.label_url+response.data;
           this.srcList.push(this.url_1);
-          this.url_2 = this.label_url+response.data;
-          console.log(this.url_1)
+          this.url_2 = this.label_url + response.data;
+          console.log(this.url_1);
           this.dialogTableVisible = false;
           this.srcList1.push(this.url_2);
           this.fullscreenLoading = false;
@@ -380,7 +352,7 @@ export default {
   height: 30px;
   width: 275px;
   text-align: center;
-  background-color: #21b3b9;
+  background-color: #63aff5;
   line-height: 30px;
 }
 
@@ -431,7 +403,7 @@ div {
 }
 
 .block-sidebar .block-sidebar-item:hover {
-  color: #187aab;
+  color: #63aff5;
 }
 
 .download_bt {
@@ -441,7 +413,7 @@ div {
 #upfile {
   width: 104px;
   height: 45px;
-  background-color: #187aab;
+  background-color: #63aff5;
   color: #fff;
   text-align: center;
   line-height: 45px;
@@ -499,7 +471,7 @@ div {
 .steps {
   font-family: "lucida grande", "lucida sans unicode", lucida, helvetica,
     "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
-  color: #21b3b9;
+  color: #63aff5;
   text-align: center;
   margin: 15px auto;
   font-size: 20px;
@@ -513,7 +485,7 @@ div {
 }
 
 #info_patient {
-  margin-top: 10px;
+  margin-top: -15%;
   margin-right: 160px;
 }
 </style>

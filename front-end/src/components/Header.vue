@@ -3,29 +3,26 @@
     <div class="top-left-edition">
       <span style="color: #21b3b9; font-weight: bold">
         <i class="el-icon-star-off" style="font-size: 23px"></i
-        >我的公众号：可达鸭的深度学习教程
+        >教教前端吧
       </span>
       <span>
-        <i class="el-icon-time" style="font-size: 23px"></i>CSDN、B站：BIT可达鸭
+        <i class="el-icon-time" style="font-size: 23px"></i>进度：烂完了
       </span>
     </div>
     <div id="word">
-      <h1>{{ msg }}</h1>
+      <h1> 糖尿病视网膜病变检测 预测系统 </h1>
     </div>
   </div>
 </template>
+
+
 <script>
 export default {
-  name: "Header",
-  data() {
-    return {
-      msg: "YOLOv5-WEB端",
-      activeIndex: "1",
-    };
-  },
-  methods: {},
+  name: "Header"
 };
 </script>
+
+
 <style scoped>
 #Header {
   padding: 30px 110px 0 150px;

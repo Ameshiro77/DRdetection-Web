@@ -1,6 +1,6 @@
 <!-- eslint-disable no-console -->
 <template>
-  <div id="Content">
+  <div id="Content" style="display:flex">
     <el-dialog
       title="AI预测中"
       :visible.sync="dialogTableVisible"
@@ -130,7 +130,7 @@
               <div style="display: flex">
                 <div
                   style="
-                    background-color: rgb(0, 0, 128));
+                    background-color: rgb(0, 0, 128);
                     width: 10px;
                     height: 10px;
                   "
@@ -177,6 +177,21 @@
           </div>
         </el-card>
       </div>
+    </div>
+    
+    <div>
+      <el-card
+          style="
+            border-radius: 8px;
+            width: 100px;
+            height: 1000px;
+            margin-bottom: -30px;
+          "
+        >
+        <div>
+          你好
+        </div>
+      </el-card>
     </div>
   </div>
 </template>

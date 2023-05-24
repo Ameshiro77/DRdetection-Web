@@ -48,10 +48,11 @@ def predict(file_name):
             seg_img[:, :, 1] += ((pr == c)*( self.colors[c][1] )).astype('uint8')
             seg_img[:, :, 2] += ((pr == c)*( self.colors[c][2] )).astype('uint8')
         '''
-        img = 'static/uploads/'+file_name
+        img = 'uploads/'+file_name
         try:
             image = Image.open(img)
         except:
+            print("img is",img)
             print('Open Error! Try again!')
         else:
             r_image = unet.detect_image(image, count=count, name_classes=name_classes)

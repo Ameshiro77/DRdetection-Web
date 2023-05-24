@@ -34,7 +34,7 @@
               <el-image
                 :src="url_1"
                 class="image_1"
-                :preview-src-list="srcList"
+                :preview-src-list="[url_1]"
                 style="border-radius: 3px 3px 0 0"
               >
                 <div slot="error">
@@ -72,7 +72,7 @@
               <el-image
                 :src="url_2"
                 class="image_1"
-                :preview-src-list="srcList1"
+                :preview-src-list="[url_2]"
                 style="border-radius: 3px 3px 0 0"
               >
                 <div slot="error">
@@ -132,12 +132,6 @@ export default {
       centerDialogVisible: true,
       url_1: "",
       url_2: "",
-      textarea: "",
-      srcList: [],
-      srcList1: [],
-      feature_list: [],
-      feature_list_1: [],
-      feat_list: [],
       url: "",
       visible: false,
       wait_return: "等待上传",
@@ -148,9 +142,6 @@ export default {
       showbutton: true,
       percentage: 0,
       fullscreenLoading: false,
-      opacitys: {
-        opacity: 0,
-      },
       dialogTableVisible: false,
     };
   },
@@ -185,8 +176,6 @@ export default {
       this.dialogTableVisible = true;
       this.url_1 = "";
       this.url_2 = "";
-      this.srcList = [];
-      this.srcList1 = [];
       this.wait_return = "";
       this.wait_upload = "";
       this.feature_list = [];
@@ -204,6 +193,7 @@ export default {
       let config = {
         headers: { "Content-Type": "multipart/form-data" },
       }; //添加请求头
+
       axios
         .post(this.server_url + "/imgUpload", param, config)
         .then((response) => {
@@ -211,23 +201,12 @@ export default {
           this.percentage = 100;
           clearInterval(timer);
           //this.url_1 = this.label_url+response.data;
-          this.srcList.push(this.url_1);
           this.url_2 = this.label_url + response.data;
           console.log(this.url_1);
           this.dialogTableVisible = false;
-          this.srcList1.push(this.url_2);
           this.fullscreenLoading = false;
           this.loading = false;
 
-          this.feat_list = Object.keys(response.data.image_info);
-
-          for (var i = 0; i < this.feat_list.length; i++) {
-            response.data.image_info[this.feat_list[i]][2] = this.feat_list[i];
-            this.feature_list.push(response.data.image_info[this.feat_list[i]]);
-          }
-
-          this.feature_list.push(response.data.image_info);
-          this.feature_list_1 = this.feature_list[0];
           //this.dialogTableVisible = false;
           this.percentage = 0;
           this.notice1();

@@ -1,3 +1,4 @@
+<!-- eslint-disable no-console -->
 <template>
   <div id="Content">
     <el-dialog
@@ -14,6 +15,7 @@
     </el-dialog>
 
     <div id="CT">
+      <!-- 传图片，显示图片的div -->
       <div id="CT_image">
         <el-card
           id="CT_image_1"
@@ -21,7 +23,7 @@
           style="
             border-radius: 8px;
             width: 800px;
-            height: 360px;
+            height: 400px;
             margin-bottom: -30px;
           "
         >
@@ -32,9 +34,9 @@
               element-loading-spinner="el-icon-loading"
             >
               <el-image
-                :src="url_1"
+                :src="url_input"
                 class="image_1"
-                :preview-src-list="[url_1]"
+                :preview-src-list="[url_input]"
                 style="border-radius: 3px 3px 0 0"
               >
                 <div slot="error">
@@ -63,6 +65,7 @@
               <span style="color: white; letter-spacing: 6px">原始图像</span>
             </div>
           </div>
+
           <div class="demo-image__preview2">
             <div
               v-loading="loading"
@@ -70,9 +73,9 @@
               element-loading-spinner="el-icon-loading"
             >
               <el-image
-                :src="url_2"
+                :src="url_result"
                 class="image_1"
-                :preview-src-list="[url_2]"
+                :preview-src-list="[url_result]"
                 style="border-radius: 3px 3px 0 0"
               >
                 <div slot="error">
@@ -84,16 +87,9 @@
               <span style="color: white; letter-spacing: 4px">检测结果</span>
             </div>
           </div>
-        </el-card>
-      </div>
 
-      <div id="info_patient">
-        <!-- 卡片放置表格 -->
-        <el-card style="border-radius: 8px">
-          <div slot="header" class="clearfix">
-            <div style="width: 750px; text-align: center">
-              <span>分类结果：</span>
-            </div>
+          <!-- 重新选择图像按钮 -->
+          <div class="reupload" style="margin-left: 12%">
             <el-button
               style="margin-left: 35px"
               v-show="!showbutton"
@@ -114,7 +110,23 @@
           </div>
         </el-card>
       </div>
+
+      <div id="info_patient">
+        <!-- 卡片放置表格 -->
+        <el-card style="border-radius: 8px">
+          <div slot="header" class="clearfix">
+            <div style="width: 750px; text-align: left">
+              <span>分类结果：</span>
+              <span style="color: rgb(255, 93, 109)">{{ classify }}</span>
+            </div>
+          </div>
+          <div v-if="classify=='稍微严重'">
+            <span>医疗建议：多睡觉</span>
+          </div>
+        </el-card>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -125,29 +137,28 @@ export default {
   name: "Content",
   data() {
     return {
-      server_url: "http://127.0.0.1:8000",
-      label_url: "http://127.0.0.1:8000/label/", //标签网络地址
-      activeName: "first",
-      active: 0,
+      label_url: "http://127.0.0.1:8000/label/", //预测结果的地址,label_url+xxx.jpg 即src
       centerDialogVisible: true,
-      url_1: "",
-      url_2: "",
-      url: "",
-      visible: false,
+
+      url_input: "", //上传图片的url
+      url_result: "", //结果图片的url
+      url: "", //无视 获取url用
+
+      classify: "", //分类结果
       wait_return: "等待上传",
       wait_upload: "等待上传",
       loading: false,
-      table: false,
-      isNav: false,
       showbutton: true,
       percentage: 0,
-      fullscreenLoading: false,
       dialogTableVisible: false,
     };
   },
+
   created: function () {
+    //网页名字
     document.title = "DR检测demo";
   },
+
   methods: {
     true_upload() {
       this.$refs.upload.click();
@@ -155,9 +166,7 @@ export default {
     true_upload2() {
       this.$refs.upload2.click();
     },
-    next() {
-      this.active++;
-    },
+
     // 获得目标文件
     getObjectURL(file) {
       var url = null;
@@ -170,48 +179,54 @@ export default {
       }
       return url;
     },
+
     // 上传文件
     update(e) {
       this.percentage = 0;
       this.dialogTableVisible = true;
-      this.url_1 = "";
-      this.url_2 = "";
+      this.url_input = "";
+      this.url_result = "";
       this.wait_return = "";
       this.wait_upload = "";
-      this.feature_list = [];
-      this.feat_list = [];
-      this.fullscreenLoading = true;
-      this.loading = true;
+      this.loading = true; //开启加载
       this.showbutton = false;
-      let file = e.target.files[0];
-      this.url_1 = this.$options.methods.getObjectURL(file);
+
+      let file = e.target.files[0]; //拿去文件
+      this.url_input = this.$options.methods.getObjectURL(file); //url_input：上传的图片所在的地址
+
       let param = new FormData(); //创建form对象
       param.append("file", file, file.name); //通过append向form对象添加数据
+
       var timer = setInterval(() => {
         this.myFunc();
       }, 30);
+
       let config = {
         headers: { "Content-Type": "multipart/form-data" },
       }; //添加请求头
 
       axios
-        .post(this.server_url + "/imgUpload", param, config)
+        .post("http://127.0.0.1:8000/imgUpload", param, config)
         .then((response) => {
+          // eslint-disable-next-line no-console
           console.log(response);
+
           this.percentage = 100;
           clearInterval(timer);
-          //this.url_1 = this.label_url+response.data;
-          this.url_2 = this.label_url + response.data;
-          console.log(this.url_1);
+          this.url_result = this.label_url + response.data;
+
+          this.classify = "稍微严重";
+          // eslint-disable-next-line no-console
+          console.log(this.url_input);
+
           this.dialogTableVisible = false;
-          this.fullscreenLoading = false;
           this.loading = false;
 
-          //this.dialogTableVisible = false;
           this.percentage = 0;
-          this.notice1();
+          this.putNotice(); //提示预测成功
         });
     },
+
     myFunc() {
       if (this.percentage + 33 < 99) {
         this.percentage = this.percentage + 33;
@@ -219,18 +234,20 @@ export default {
         this.percentage = 99;
       }
     },
-    drawChart() {},
-    notice1() {
+
+    putNotice() {
       this.$notify({
         title: "预测成功",
         message: "点击图片可以查看大图",
-        duration: 0,
+        duration: 5000,
         type: "success",
       });
     },
   },
+
   mounted() {
-    this.drawChart();
+    // eslint-disable-next-line no-console
+    console.log("组件挂载完毕");
   },
 };
 </script>
@@ -425,7 +442,7 @@ div {
 
 #Content {
   width: 85%;
-  height: 800px;
+ 
   background-color: #ffffff;
   margin: 15px auto;
   display: flex;
@@ -464,7 +481,7 @@ div {
 }
 
 #info_patient {
-  margin-top: -15%;
+  margin-top: 0%;
   margin-right: 160px;
 }
 </style>

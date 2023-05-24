@@ -11,16 +11,16 @@
           color: #252ce8;
           letter-spacing: 10px;
           font-size: 2.3em;
-          margin-left: -2%;
+          margin-left: -5%;
         "
       >
         糖尿病视网膜病变检测系统
       </h1>
     </div>
     <!-- 自己加 -->
-    <div class="no!" style="margin-left: 10%">
-      <span>
-        <i class="el-icon-time" style="font-size: 23px"></i>进度：烂完了
+    <div class="no!" style="margin-left: 10%;margin-top:1% ">
+      <span >
+        <i class="el-icon-time" style="font-size: 23px"></i>进度：0.001%
       </span>
     </div>
   </div>

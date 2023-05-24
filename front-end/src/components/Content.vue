@@ -15,76 +15,128 @@
     </el-dialog>
 
     <div id="CT">
-      <!-- 传图片，显示图片的div -->
-      <div id="CT_image">
+      <!-- 传图片，显示图片的div 以及显示对应颜色对应图例 -->
+      <div id="CT_image" style="display: flex">
+        <!-- 用card的方式显示 -->
         <el-card
           id="CT_image_1"
           class="box-card"
           style="
             border-radius: 8px;
-            width: 800px;
+            width: 1000px;
             height: 400px;
             margin-bottom: -30px;
           "
         >
-          <div class="demo-image__preview1">
-            <div
-              v-loading="loading"
-              element-loading-text="上传图片中"
-              element-loading-spinner="el-icon-loading"
-            >
-              <el-image
-                :src="url_input"
-                class="image_1"
-                :preview-src-list="[url_input]"
-                style="border-radius: 3px 3px 0 0"
+          <div style="display: flex">
+            <!-- 上传的图 -->
+            <div class="demo-image__preview1">
+              <div
+                v-loading="loading"
+                element-loading-text="上传图片中"
+                element-loading-spinner="el-icon-loading"
               >
-                <div slot="error">
-                  <div slot="placeholder" class="error">
-                    <el-button
-                      v-show="showbutton"
-                      type="primary"
-                      icon="el-icon-upload"
-                      class="download_bt"
-                      v-on:click="true_upload"
-                    >
-                      上传图像
-                      <input
-                        ref="upload"
-                        style="display: none"
-                        name="file"
-                        type="file"
-                        @change="update"
-                      />
-                    </el-button>
+                <el-image
+                  :src="url_input"
+                  class="image_1"
+                  :preview-src-list="[url_input]"
+                  style="border-radius: 3px 3px 0 0"
+                >
+                  <div slot="error">
+                    <div slot="placeholder" class="error">
+                      <el-button
+                        v-show="showbutton"
+                        type="primary"
+                        icon="el-icon-upload"
+                        class="download_bt"
+                        v-on:click="true_upload"
+                      >
+                        上传图像
+                        <input
+                          ref="upload"
+                          style="display: none"
+                          name="file"
+                          type="file"
+                          @change="update"
+                        />
+                      </el-button>
+                    </div>
                   </div>
-                </div>
-              </el-image>
+                </el-image>
+              </div>
+              <div class="img_info_1" style="border-radius: 0 0 5px 5px">
+                <span style="color: white; letter-spacing: 6px">原始图像</span>
+              </div>
             </div>
-            <div class="img_info_1" style="border-radius: 0 0 5px 5px">
-              <span style="color: white; letter-spacing: 6px">原始图像</span>
-            </div>
-          </div>
 
-          <div class="demo-image__preview2">
-            <div
-              v-loading="loading"
-              element-loading-text="处理中,请耐心等待"
-              element-loading-spinner="el-icon-loading"
-            >
-              <el-image
-                :src="url_result"
-                class="image_1"
-                :preview-src-list="[url_result]"
-                style="border-radius: 3px 3px 0 0"
+            <!-- 结果的图 -->
+            <div class="demo-image__preview2">
+              <div
+                v-loading="loading"
+                element-loading-text="处理中,请耐心等待"
+                element-loading-spinner="el-icon-loading"
               >
-                <div slot="error">
-                  <div slot="placeholder" class="error">{{ wait_return }}</div>
-                </div>
-              </el-image>
+                <el-image
+                  :src="url_result"
+                  class="image_1"
+                  :preview-src-list="[url_result]"
+                  style="border-radius: 3px 3px 0 0"
+                >
+                  <div slot="error">
+                    <div slot="placeholder" class="error">
+                      {{ wait_return }}
+                    </div>
+                  </div>
+                </el-image>
+              </div>
+              <div class="img_info_1" style="border-radius: 0 0 5px 5px">
+                <span style="color: white; letter-spacing: 4px">检测结果</span>
+              </div>
             </div>
-            <div class="img_info_1" style="border-radius: 0 0 5px 5px">
-              <span style="color: white; letter-spacing: 4px">检测结果</span>
+
+            <!-- 一个简单的图例 -->
+
+            <div class="legend" style="margin-left: 5%; margin-top: 10%">
+              <div style="display: flex">
+                <div
+                  style="
+                    background-color: rgb(128, 0, 0);
+                    width: 10px;
+                    height: 10px;
+                  "
+                ></div>
+                <span>&nbsp; EX</span>
+              </div>
+              <div style="display: flex">
+                <div
+                  style="
+                    background-color: rgb(0, 128, 0);
+                    width: 10px;
+                    height: 10px;
+                  "
+                ></div>
+                <span>&nbsp; HE</span>
+              </div>
+              <div style="display: flex">
+                <div
+                  style="
+                    background-color: rgb(128, 128, 0);
+                    width: 10px;
+                    height: 10px;
+                  "
+                ></div>
+                <span>&nbsp; MA</span>
+              </div>
+              <div style="display: flex">
+                <div
+                  style="
+                    background-color: rgb(0, 0, 128));
+                    width: 10px;
+                    height: 10px;
+                  "
+                ></div>
+                <span>&nbsp; SE</span>
+              </div>
             </div>
           </div>
 
@@ -113,20 +165,19 @@
 
       <div id="info_patient">
         <!-- 卡片放置表格 -->
-        <el-card style="border-radius: 8px">
+        <el-card style="border-radius: 8px; width: 1000px">
           <div slot="header" class="clearfix">
             <div style="width: 750px; text-align: left">
               <span>分类结果：</span>
               <span style="color: rgb(255, 93, 109)">{{ classify }}</span>
             </div>
           </div>
-          <div v-if="classify=='稍微严重'">
+          <div v-if="classify == '稍微严重'">
             <span>医疗建议：多睡觉</span>
           </div>
         </el-card>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -363,7 +414,7 @@ export default {
   width: 250px;
   height: 290px;
 
-  margin: 20px 460px;
+  margin: 20px 60px;
   /* background-color: green; */
 }
 
@@ -442,7 +493,7 @@ div {
 
 #Content {
   width: 85%;
- 
+
   background-color: #ffffff;
   margin: 15px auto;
   display: flex;

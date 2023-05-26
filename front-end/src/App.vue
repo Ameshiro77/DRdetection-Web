@@ -8,7 +8,7 @@
 
 <script>
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+//import Footer from "./components/Footer";
 import Content from "./components/Content";
 export default {
   name: "眼疾辅助诊断系统",

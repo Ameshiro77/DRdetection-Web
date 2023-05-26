@@ -172,8 +172,8 @@
               <span style="color: rgb(255, 93, 109)">{{ classify }}</span>
             </div>
           </div>
-          <div v-if="classify == '稍微严重'">
-            <span>医疗建议：多睡觉</span>
+          <div>
+            <span>{{ text }}</span>
           </div>
         </el-card>
       </div>
@@ -211,6 +211,7 @@ export default {
       url: "", //无视 获取url用
 
       classify: "", //分类结果
+      text:"",//医疗建议
       wait_return: "等待上传",
       wait_upload: "等待上传",
       loading: false,
@@ -276,12 +277,15 @@ export default {
         .then((response) => {
           // eslint-disable-next-line no-console
           console.log(response);
+          // eslint-disable-next-line no-console
+          //console.log(response.data['filename']);
 
           this.percentage = 100;
           clearInterval(timer);
-          this.url_result = this.label_url + response.data;
+          this.url_result = this.label_url + response.data['filename'];
 
-          this.classify = "稍微严重";
+          this.classify = response.data['label'];
+          this.text=response.data['text']
           // eslint-disable-next-line no-console
           console.log(this.url_input);
 
@@ -384,7 +388,7 @@ export default {
   justify-content: center;
   margin: 0 auto;
   margin-right: 0px;
-  max-width: 1800px;
+  max-width: 1000px;
 }
 
 #CT_image_1 {

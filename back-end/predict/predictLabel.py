@@ -55,7 +55,7 @@ def predict(file_name):
             print("img is",img)
             print('Open Error! Try again!')
         else:
-            r_image = unet.detect_image(image, count=count, name_classes=name_classes)
+            r_image = unet.detect_image(image, count=count, name_classes=name_classes,file_name=file_name)
             r_image.save('static/label/'+file_name)
 
 

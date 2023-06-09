@@ -7,16 +7,15 @@ import os
 from predict.predictLabel import predict
 from predict.predict_DR_grading import DO_Efficientnet
 from flask_cors import CORS
-
+from predict.utils.utils_metrics import get_metric
 # ==================================
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-app = Flask(__name__, static_folder='static/label', static_url_path="/label")
+app = Flask(__name__, template_folder='',static_folder='')
 CORS(app, resources=r'/*')  # 注册CORS, "/*" 允许访问所有api
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 auth = HTTPBasicAuth()
-
 # ================================================#
 #                 以下是对API的定义               #
 # ================================================#
@@ -60,10 +59,10 @@ def upload_img():
             result = do_efficientnet.predict(filename)
 
             result.update({'filename': filename})
-
+ 
             print(result)
-
-            return jsonify(result)  # 返回名称便于拿
+            metric=get_metric(filename.split('.')[0]+'.png')
+            return jsonify(result,metric)  # 返回名称便于拿
 
 
 # ==============================================================================================================================

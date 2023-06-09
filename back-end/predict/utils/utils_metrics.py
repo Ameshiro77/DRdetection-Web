@@ -53,6 +53,23 @@ def per_class_Precision(hist):
 
 def per_Accuracy(hist):
     return np.sum(np.diag(hist)) / np.maximum(np.sum(hist), 1) 
+    
+#获取两张图片对比之后的iou,precision,recall,返回IoUs,PA_Recall,Precision
+def get_metric(pic_name,num_classes=5):
+    pred_dir=os.path.join('static/label_05',pic_name)
+    real_dir=os.path.join('static/real_05',pic_name)
+    hist = np.zeros((num_classes, num_classes))
+    pred = np.array(Image.open(pred_dir))  
+    label = np.array(Image.open(real_dir)) 
+    print(label[label>4])
+    hist += fast_hist(label.flatten(), pred.flatten(), num_classes)
+    IoUs        = per_class_iu(hist)
+    PA_Recall   = per_class_PA_Recall(hist)
+    Precision   = per_class_Precision(hist)
+    
+    print(IoUs,PA_Recall,Precision)
+
+    return IoUs.tolist(),PA_Recall.tolist(),Precision.tolist()
 
 def compute_mIoU(gt_dir, pred_dir, png_name_list, num_classes, name_classes=None):  
     print('Num classes', num_classes)  
@@ -60,6 +77,7 @@ def compute_mIoU(gt_dir, pred_dir, png_name_list, num_classes, name_classes=None
     #   创建一个全是0的矩阵，是一个混淆矩阵
     #-----------------------------------------#
     hist = np.zeros((num_classes, num_classes))
+    
     
     #------------------------------------------------#
     #   获得验证集标签路径列表，方便直接读取
@@ -187,5 +205,4 @@ def show_results(miou_out_path, hist, IoUs, PA_Recall, Precision, name_classes, 
         for i in range(len(hist)):
             writer_list.append([name_classes[i]] + [str(x) for x in hist[i]])
         writer.writerows(writer_list)
-    print("Save confusion_matrix out to " + os.path.join(miou_out_path, "confusion_matrix.csv"))
-            
+    print("Save confusion_matrix out to " + os.path.join(miou_out_path, "confusion_matrix.csv"))      

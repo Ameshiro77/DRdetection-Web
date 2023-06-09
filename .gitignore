@@ -1,2 +1,3 @@
-backend/predict/models/best_epoch_weights.pth
+backend/predict/models/*.pth
 backend/predict/__pycache__
+*.pth

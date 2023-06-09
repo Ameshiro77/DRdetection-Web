@@ -23,7 +23,7 @@
           class="box-card"
           style="
             border-radius: 8px;
-            width: 1000px;
+            width: 100%;
             height: 400px;
             margin-bottom: -30px;
           "
@@ -91,6 +91,31 @@
               </div>
               <div class="img_info_1" style="border-radius: 0 0 5px 5px">
                 <span style="color: white; letter-spacing: 4px">检测结果</span>
+              </div>
+            </div>
+            
+            <!-- 结果的图 -->
+            <div class="demo-image__preview2">
+              <div
+                v-loading="loading"
+                element-loading-text="处理中,请耐心等待"
+                element-loading-spinner="el-icon-loading"
+              >
+                <el-image
+                  :src="real_label"
+                  class="image_1"
+                  :preview-src-list="[url_result]"
+                  style="border-radius: 3px 3px 0 0"
+                >
+                  <div slot="error">
+                    <div slot="placeholder" class="error">
+                      {{ wait_return }}
+                    </div>
+                  </div>
+                </el-image>
+              </div>
+              <div class="img_info_1" style="border-radius: 0 0 5px 5px">
+                <span style="color: white; letter-spacing: 4px">实际结果</span>
               </div>
             </div>
 
@@ -165,9 +190,9 @@
 
       <div id="info_patient">
         <!-- 卡片放置表格 -->
-        <el-card style="border-radius: 8px; width: 1000px">
+        <el-card style="border-radius: 8px; width: 100%">
           <div slot="header" class="clearfix">
-            <div style="width: 750px; text-align: left">
+            <div style="width: 100%; text-align: left">
               <span>分类结果：</span>
               <span style="color: rgb(255, 93, 109)">{{ classify }}</span>
             </div>
@@ -179,20 +204,7 @@
       </div>
     </div>
     
-    <div>
-      <el-card
-          style="
-            border-radius: 8px;
-            width: 100px;
-            height: 1000px;
-            margin-bottom: -30px;
-          "
-        >
-        <div>
-          你好
-        </div>
-      </el-card>
-    </div>
+    
   </div>
 </template>
 
@@ -203,8 +215,10 @@ export default {
   name: "Content",
   data() {
     return {
-      label_url: "http://127.0.0.1:8000/label/", //预测结果的地址,label_url+xxx.jpg 即src
+      label_url: "http://127.0.0.1:8000/static/label/", //预测结果的地址,label_url+xxx.jpg 即src
+      real_url:"http://127.0.0.1:8000/static/real_label/",   //实际标签的地址
       centerDialogVisible: true,
+      real_label:'',
 
       url_input: "", //上传图片的url
       url_result: "", //结果图片的url
@@ -282,10 +296,11 @@ export default {
 
           this.percentage = 100;
           clearInterval(timer);
-          this.url_result = this.label_url + response.data['filename'];
-
-          this.classify = response.data['label'];
-          this.text=response.data['text']
+          this.url_result = this.label_url + response.data[0]['filename'];
+          this.real_label=this.real_url    + response.data[0]['filename'].replace(".jpg", ".png");
+          console.log(this.real_label)
+          this.classify = response.data[0]['label'];
+          this.text=response.data[0]['text']
           // eslint-disable-next-line no-console
           console.log(this.url_input);
 
@@ -370,7 +385,7 @@ export default {
 }
 
 .box-card {
-  width: 680px;
+  width: 100%;
   height: 200px;
   border-radius: 8px;
   margin-top: -20px;
@@ -388,7 +403,6 @@ export default {
   justify-content: center;
   margin: 0 auto;
   margin-right: 0px;
-  max-width: 1000px;
 }
 
 #CT_image_1 {
@@ -511,7 +525,7 @@ div {
 }
 
 #Content {
-  width: 85%;
+  width: 100%;
 
   background-color: #ffffff;
   margin: 15px auto;
@@ -551,8 +565,11 @@ div {
 }
 
 #info_patient {
-  margin-top: 0%;
-  margin-right: 160px;
+  width: 100%;
+  margin-top: 5px;
+  justify-content: center;
+  display: flex;
+  
 }
 </style>
 

@@ -1,6 +1,6 @@
 <!-- eslint-disable no-console -->
 <template>
-  <div id="Content" style="display:flex">
+  <div id="Content">
     <el-dialog
       title="AI预测中"
       :visible.sync="dialogTableVisible"
@@ -13,10 +13,9 @@
       <el-progress :percentage="percentage"></el-progress>
       <span slot="footer" class="dialog-footer">请耐心等待约3秒钟</span>
     </el-dialog>
-
     <div id="CT">
       <!-- 传图片，显示图片的div 以及显示对应颜色对应图例 -->
-      <div id="CT_image" style="display: flex">
+      <div id="CT_image">
         <!-- 用card的方式显示 -->
         <el-card
           id="CT_image_1"
@@ -187,6 +186,34 @@
           </div>
         </el-card>
       </div>
+      <div>
+        <el-table
+      :data="tableData"
+      border
+      style="width: 40%">
+      <el-table-column
+        prop="type"
+        label="像素类型"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="iou"
+        label="Iou"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="recall"
+        label="recall"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="precision"
+        label="precision"
+        width="180">
+      </el-table-column>
+    </el-table>
+
+      </div>
 
       <div id="info_patient">
         <!-- 卡片放置表格 -->
@@ -232,6 +259,7 @@ export default {
       showbutton: true,
       percentage: 0,
       dialogTableVisible: false,
+      tableData: []
     };
   },
 
@@ -293,7 +321,6 @@ export default {
           console.log(response);
           // eslint-disable-next-line no-console
           //console.log(response.data['filename']);
-
           this.percentage = 100;
           clearInterval(timer);
           this.url_result = this.label_url + response.data[0]['filename'];
@@ -302,7 +329,7 @@ export default {
           this.classify = response.data[0]['label'];
           this.text=response.data[0]['text']
           // eslint-disable-next-line no-console
-          console.log(this.url_input);
+          this.updateMetric(response.data[1]);
 
           this.dialogTableVisible = false;
           this.loading = false;
@@ -311,7 +338,21 @@ export default {
           this.putNotice(); //提示预测成功
         });
     },
+    //更新指标
+    updateMetric(metric){
+      var name=["background","EX", "HE", "MA", "SE"]
+      for(let i=0;i<metric[0].length;i++){
+        if(metric[0][i]!="0"){
+          let obj={}
+          obj.type=name[i]; //获取名字
+          obj.iou=metric[0][i];
+          obj.recall=metric[1][i];
+          obj.precision=metric[2][i];
+          this.tableData.push(obj);
+        }
+      }
 
+    },
     myFunc() {
       if (this.percentage + 33 < 99) {
         this.percentage = this.percentage + 33;
@@ -319,7 +360,7 @@ export default {
         this.percentage = 99;
       }
     },
-
+    
     putNotice() {
       this.$notify({
         title: "预测成功",
@@ -396,7 +437,6 @@ export default {
 }
 
 #CT {
-  display: flex;
   height: 100%;
   width: 100%;
   flex-wrap: wrap;
@@ -526,11 +566,8 @@ div {
 
 #Content {
   width: 100%;
-
   background-color: #ffffff;
   margin: 15px auto;
-  display: flex;
-  min-width: 1200px;
 }
 
 .divider {

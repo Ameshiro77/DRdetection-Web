@@ -4,11 +4,13 @@ from PIL import Image
 from torch import nn
 from torchvision import transforms
 from efficientnet_pytorch.model import EfficientNet
+from predict.nets.model_bira_net_resnet import BiraNet_ResNet
+from predict.nets.model_ra import KeNet
 
 cuda = False
 
 
-class DO_Efficientnet(object):
+class DO_net(object):
     def __init__(self):
         self.model = None
 
@@ -42,11 +44,33 @@ class DO_Efficientnet(object):
                 res = self.model.load_state_dict(mapped_model_state, strict=False)
         return self.model
 
+    def get_net(self, path):
+        self.model = torch.load(path)
+        return self.model
+
+    def get_Kenet(self, path):
+        self.model = KeNet(6, False)
+
+        model_path = path
+        model_state = torch.load(model_path)
+        self.model.load_state_dict(model_state)
+
+        return self.model
+
+    def get_BIRA(self,path):
+        self.model = BiraNet_ResNet(512, 6)
+
+        model_path = path
+        model_state = torch.load(model_path)
+        self.model.load_state_dict(model_state)
+
+        return self.model
+
     def predict(self, file_name):
         """
             predict the img at the filepath
         :param file_name: 图片名称
-        :return: {'label':0-4(type=int),
+        :return: {'label':0-5(type=int),
                   'probability':(type=float),
                   'text':(type=str)
                   }
@@ -74,7 +98,7 @@ class DO_Efficientnet(object):
 
         label = int(np.argmax(preds))
 
-        grading_list = ["无明显病变", "轻度非增殖期", "中度非增殖期", "重度非增殖期", "增殖期"]
+        grading_list = ["无明显病变", "轻度非增殖期", "中度非增殖期", "重度非增殖期", "增殖期","高危增殖期"]
 
         result = {}
         key1 = 'label'
@@ -107,7 +131,7 @@ class DO_Efficientnet(object):
 
 
 if __name__ == '__main__':
-    do_efficientnet = DO_Efficientnet()
+    do_RA = DO_net()
 
-    do_efficientnet.get_efficientnet('b3', False, './models/best_model for 20epoch - EfficientNetB3 .pth', 5)
-    do_efficientnet.predict('../static/label/007-0004-000.jpg')
+    do_RA.get_Kenet('predict/models/train_all_epoch_017_acc_0.8661.pth')
+    do_RA.predict('../static/label/007-0004-000.jpg')

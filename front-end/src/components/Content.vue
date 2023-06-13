@@ -224,6 +224,14 @@
               <span style="color: rgb(255, 93, 109)">{{ classify }}</span>
             </div>
           </div>
+
+          <div slot="header" class="clearfix">
+            <div style="width: 100%; text-align: left">
+              <span>置信度：</span>
+              <span style="color: rgb(255, 93, 109)">{{ classify_p }}</span>
+            </div>
+          </div>
+
           <div>
             <span>{{ text }}</span>
           </div>
@@ -252,6 +260,7 @@ export default {
       url: "", //无视 获取url用
 
       classify: "", //分类结果
+      classify_p:"",
       text:"",//医疗建议
       wait_return: "等待上传",
       wait_upload: "等待上传",
@@ -325,7 +334,9 @@ export default {
           clearInterval(timer);
           this.url_result = this.label_url + response.data[0]['filename'];
           this.real_label=this.real_url    + response.data[0]['filename'].replace(".jpg", ".png");
+          // eslint-disable-next-line no-console
           console.log(this.real_label)
+          this.classify_p = response.data[0]['probability']
           this.classify = response.data[0]['label'];
           this.text=response.data[0]['text']
           // eslint-disable-next-line no-console

@@ -5,7 +5,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.utils import secure_filename
 import os
 from predict.predictLabel import predict
-from predict.predict_DR_grading import DO_Efficientnet
+from predict.predict_DR_grading import DO_net
 from flask_cors import CORS
 from predict.utils.utils_metrics import get_metric
 # ==================================
@@ -53,10 +53,10 @@ def upload_img():
 
             # label=os.path.join(result,filename)
 
-            do_efficientnet = DO_Efficientnet()
+            do_RA = DO_net()
 
-            do_efficientnet.get_efficientnet('b3', False, './models/best_model for 20epoch - EfficientNetB3 .pth', 5)
-            result = do_efficientnet.predict(filename)
+            do_RA.get_Kenet('predict/models/train_all_epoch_017_acc_0.8661.pth')
+            result = do_RA.predict(filename)
 
             result.update({'filename': filename})
  

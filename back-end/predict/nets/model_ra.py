@@ -60,4 +60,5 @@ class KeNet(nn.Module):
         gap = torch.squeeze(Lambda(lambda x: x[0] / x[1])([gap_features, gap_mask]))
         # print gap.shape
         x = self.denses(gap)
-        return F.log_softmax(x, dim=1)
+
+        return F.log_softmax(x)

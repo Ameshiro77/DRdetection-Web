@@ -190,26 +190,26 @@
         <el-table
       :data="tableData"
       border
-      style="width: 40%">
+      style="width:100%">
       <el-table-column
         prop="type"
         label="像素类型"
-        width="180">
+        >
       </el-table-column>
       <el-table-column
         prop="iou"
         label="Iou"
-        width="180">
+        >
       </el-table-column>
       <el-table-column
         prop="recall"
         label="recall"
-        width="180">
+        >
       </el-table-column>
       <el-table-column
         prop="precision"
         label="precision"
-        width="180">
+        >
       </el-table-column>
     </el-table>
 

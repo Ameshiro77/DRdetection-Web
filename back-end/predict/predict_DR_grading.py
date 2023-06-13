@@ -78,12 +78,12 @@ class DO_net(object):
         filepath = 'uploads/' + file_name
 
         img = Image.open(filepath)
-        img = img.resize((256, 256), Image.BILINEAR)
+        img = img.resize((610, 610), Image.BILINEAR)
         img = np.array(img)
 
         to_tensor = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+            transforms.Normalize((0.3073, 0.1891, 0.0936), (0.2701, 0.1735, 0.0901))
         ])
         img = to_tensor(img)
         img = torch.unsqueeze(img, 0)  # 给最高位添加一个维度，也就是batchsize的大小
@@ -113,16 +113,17 @@ class DO_net(object):
 
         # 对指数值进行归一化
         softmax_values = exp_values / np.sum(exp_values)
-        # print(softmax_values)
+        print(softmax_values)
 
-        result.update({key2: softmax_values[0][label].astype(np.float64)})  # 返回置信度,感觉softmax不是很靠谱。。
+        result.update({key2: softmax_values[label].astype(np.float64)})  # 返回置信度,感觉softmax不是很靠谱。。
 
         # 返回医疗建议
         suggest = ["无病变或正常视网膜表现。,建议进行定期眼睛检查以监测视网膜健康状况，并保持良好的眼睛卫生和健康生活方式。",
                    "微小病变，可能包括微血管瘤、硬性渗出等。在这种情况下，通常建议继续定期眼睛检查，并根据需要进行进一步的检查或治疗，以确保病变不进一步恶化。",
                    "中度病变，可能包括中等大小的血管瘤、出血或渗出。此时，可能需要更频繁的眼睛检查，并根据病情决定是否需要治疗，如激光光凝或注射药物。",
                    "严重病变，可能包括大型血管瘤、出血或渗出明显增多。在这种情况下，通常需要更加紧密的随访和治疗，以防止进一步视力损害。治疗可能包括激光光凝、注射药物或其他手术干预。",
-                   "晚期病变，可能包括视网膜脱离或其他严重并发症。在这种情况下，可能需要紧急的眼科治疗，如手术修复视网膜脱离。"]
+                   "晚期病变，可能包括视网膜脱离或其他严重并发症。在这种情况下，可能需要紧急的眼科治疗，如手术修复视网膜脱离。",
+                   "高危病变，请立即就医，定期检查视网膜，可能需要定期眼底照相、光学相干断层扫描（OCT）等检查，通常需要治疗，如激光光凝、抗血管内皮生长因子（VEGF）治疗或玻璃体切割手术。"]
         result.update({key3: suggest[label]})  # 返回建议
 
         print(result)

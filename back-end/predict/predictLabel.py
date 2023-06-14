@@ -31,7 +31,7 @@ def predict(file_name):
     #   count、name_classes仅在mode='predict'时有效
     #-------------------------------------------------------------------------#
     count           = False
-    name_classes    = ["background","EX", "HE", "MA", "SE"]
+    name_classes    = ["background","EX", "HE", "SE", "MA"]
 
     # === 开测 === #
     if mode == "predict":

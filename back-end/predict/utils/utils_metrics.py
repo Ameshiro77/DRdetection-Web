@@ -58,6 +58,9 @@ def per_Accuracy(hist):
 def get_metric(pic_name,num_classes=5):
     pred_dir=os.path.join('static/label_05',pic_name)
     real_dir=os.path.join('static/real_05',pic_name)
+    #假如不存在,直接返回空
+    if not os.path.exists(real_dir):
+        return [],[],[]
     hist = np.zeros((num_classes, num_classes))
     pred = np.array(Image.open(pred_dir))  
     label = np.array(Image.open(real_dir)) 

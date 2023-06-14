@@ -103,7 +103,7 @@
                 <el-image
                   :src="real_label"
                   class="image_1"
-                  :preview-src-list="[url_result]"
+                  :preview-src-list="[real_label]"
                   style="border-radius: 3px 3px 0 0"
                 >
                   <div slot="error">
@@ -149,7 +149,7 @@
                     height: 10px;
                   "
                 ></div>
-                <span>&nbsp; MA</span>
+                <span>&nbsp; SE</span>
               </div>
               <div style="display: flex">
                 <div
@@ -159,7 +159,7 @@
                     height: 10px;
                   "
                 ></div>
-                <span>&nbsp; SE</span>
+                <span>&nbsp; MA</span>
               </div>
             </div>
           </div>
@@ -351,7 +351,8 @@ export default {
     },
     //更新指标
     updateMetric(metric){
-      var name=["background","EX", "HE", "MA", "SE"]
+      var name=["background","EX", "HE", "SE", "MA"]
+      this.tableData=[]
       for(let i=0;i<metric[0].length;i++){
         if(metric[0][i]!="0"){
           let obj={}
